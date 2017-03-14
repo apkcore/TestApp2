@@ -57,8 +57,9 @@ public class CardLayoutManager extends RecyclerView.LayoutManager {
                 }
             }
         } else {
-            for (int position = itemCount - 1; position > 0; position--){
-                View view = recycler.getViewForPosition(position);
+            // 当数据源个数小于或等于最大显示数时
+            for (int position = itemCount - 1; position >= 0; position--) {
+                final View view = recycler.getViewForPosition(position);
                 addView(view);
                 measureChildWithMargins(view,0,0);
                 int widthSpace = getWidth() - getDecoratedMeasuredWidth(view);
@@ -79,7 +80,7 @@ public class CardLayoutManager extends RecyclerView.LayoutManager {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             RecyclerView.ViewHolder childViewHolder = mRecyclerView.getChildViewHolder(v);
-            if (MotionEventCompat.getActionMasked(event) == MotionEventCompat.ACTION_POINTER_DOWN) {
+            if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
                 mItemTouchHelper.startSwipe(childViewHolder);
             }
             return false;
