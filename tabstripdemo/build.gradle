@@ -1,0 +1,75 @@
+apply plugin: 'com.android.application'
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        applicationId "com.apkcore.tabstripdemo"
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+
+        ndk {
+            moduleName "NdkTest"
+            stl = "gnustl_shared"
+        }
+    }
+    sourceSets {
+        main {
+            jni.srcDir "src/main/jni"
+            jniLibs.srcDir "src/main/libs"
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'me.majiajie:pager-bottom-tab-strip:1.0.0'
+
+}
+//apply plugin: 'com.android.model.application'
+//model {
+//    android {
+//        compileSdkVersion = 25
+//        buildToolsVersion = "25.0.2"
+//        defaultConfig.with {
+//            applicationId = "com.apkcore.tabstripdemo"
+//            minSdkVersion.apiLevel = 15
+//            targetSdkVersion.apiLevel = 25
+//            versionCode = 1
+//            versionName = "1.0"
+//        }
+////        tasks.withType(JavaCompile) {
+////            //指定编译JDK版本
+////            sourceCompatibility = JavaVersion.VERSION_1_7
+////            targetCompatibility = JavaVersion.VERSION_1_7
+////        }
+//    }
+//    android.ndk {
+//        moduleName = "NdkTest"
+//        ldLibs += "log"
+////        abiFilters += "armeabi"
+////        abiFilters += "armeabi-v7a"
+////        abiFilters += "x86"
+//        stl = "gnustl_shared"
+//    }
+//    android.buildTypes {
+//        release {
+//            minifyEnabled = false
+//            proguardFiles += file('proguard-rules.pro')
+//        }
+//    }
+//}
+//dependencies {
+//    compile fileTree(dir: 'libs', include: ['*.jar'])
+//    compile 'com.android.support:appcompat-v7:25.1.0'
+//    compile 'me.majiajie:pager-bottom-tab-strip:1.0.0'
+//}
