@@ -1,125 +1,111 @@
 package com.apkcore.cardswipelayout;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.apkcore.cardswipelayout.lib.CardConfig;
-import com.apkcore.cardswipelayout.lib.CardItemTouchHelperCallback;
-import com.apkcore.cardswipelayout.lib.CardLayoutManager;
-import com.apkcore.cardswipelayout.lib.OnSwipeListener;
+import com.apkcore.cardswipelayout.fragment.FragmentFour;
+import com.apkcore.cardswipelayout.fragment.FragmentOne;
+import com.apkcore.cardswipelayout.fragment.FragmentThree;
+import com.apkcore.cardswipelayout.fragment.FragmentTwo;
+import com.ashokvarma.bottomnavigation.BadgeItem;
+import com.ashokvarma.bottomnavigation.BottomNavigationBar;
+import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class MainActivity extends AppCompatActivity {
-    private List<Integer> list = new ArrayList<>();
+public class MainActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener {
+    private BottomNavigationBar mBottomNavigationBar;
+    private FragmentOne mFragmentOne;
+    private FragmentTwo mFragmentTwo;
+    private FragmentThree mFragmentThree;
+    private FragmentFour mFragmentFour;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initView();
-        initData();
+        mBottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
+
+        /*** the setting for BadgeItem ***/
+
+        BadgeItem badgeItem = new BadgeItem();
+        badgeItem.setHideOnSelect(false)
+                .setText("10")
+                .setBackgroundColorResource(R.color.colorAccent)
+                .setBorderWidth(0);
+
+        /*** the setting for BottomNavigationBar ***/
+        mBottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);
+        mBottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_RIPPLE);
+//        mBottomNavigationBar.setMode(BottomNavigationBar.MODE_SHIFTING);
+//        mBottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
+        mBottomNavigationBar.setBarBackgroundColor(R.color.white);//set background color for navigation bar
+        mBottomNavigationBar.setInActiveColor(R.color.blue);//unSelected icon color
+        mBottomNavigationBar.addItem(new BottomNavigationItem(R.mipmap.ic_launcher, R.string.tab_one).setActiveColorResource(R.color.green).setBadgeItem(badgeItem))
+                .addItem(new BottomNavigationItem(R.mipmap.ic_launcher, R.string.tab_two).setActiveColorResource(R.color.orange))
+                .addItem(new BottomNavigationItem(R.mipmap.ic_launcher, R.string.tab_three).setActiveColorResource(R.color.lime))
+                .addItem(new BottomNavigationItem(R.mipmap.ic_launcher, R.string.tab_four))
+                .setFirstSelectedPosition(0)
+                .initialise();
+
+        mBottomNavigationBar.setTabSelectedListener(this);
+        setDefaultFragment();
     }
 
-    private void initView() {
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(new MyAdapter());
-        CardItemTouchHelperCallback cardCallback = new CardItemTouchHelperCallback(recyclerView.getAdapter(), list);
-        cardCallback.setOnSwipedListener(new OnSwipeListener<Integer>() {
+    /**
+     * set the default fragment
+     */
+    private void setDefaultFragment() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        mFragmentOne = FragmentOne.newInstance("First Fragment");
+        transaction.replace(R.id.ll_content, mFragmentOne).commit();
+    }
 
-            @Override
-            public void onSwiping(RecyclerView.ViewHolder viewHolder, float ratio, int direction) {
-                MyAdapter.MyViewHolder myHolder = (MyAdapter.MyViewHolder) viewHolder;
-                viewHolder.itemView.setAlpha(1 - Math.abs(ratio) * 0.2f);
-                if (direction == CardConfig.SWIPING_LEFT) {
-                    myHolder.dislikeImageView.setAlpha(Math.abs(ratio));
-                } else if (direction == CardConfig.SWIPING_RIGHT) {
-                    myHolder.likeImageView.setAlpha(Math.abs(ratio));
-                } else {
-                    myHolder.dislikeImageView.setAlpha(0f);
-                    myHolder.likeImageView.setAlpha(0f);
+    @Override
+    public void onTabSelected(int position) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        switch (position) {
+            case 0:
+                if (mFragmentOne == null) {
+                    mFragmentOne = FragmentOne.newInstance("First Fragment");
                 }
-            }
+                transaction.replace(R.id.ll_content, mFragmentOne);
+                break;
+            case 1:
+                if (mFragmentTwo == null) {
+                    mFragmentTwo = FragmentTwo.newInstance("Second Fragment");
+                }
+                transaction.replace(R.id.ll_content, mFragmentTwo);
+                break;
+            case 2:
+                if (mFragmentThree == null) {
+                    mFragmentThree = FragmentThree.newInstance("Third Fragment");
+                }
+                transaction.replace(R.id.ll_content, mFragmentThree);
+                break;
+            case 3:
+                if (mFragmentFour == null) {
+                    mFragmentFour = FragmentFour.newInstance("Forth Fragment");
+                }
+                transaction.replace(R.id.ll_content, mFragmentFour);
+                break;
+            default:
+                if (mFragmentOne == null) {
+                    mFragmentOne = FragmentOne.newInstance("First Fragment");
+                }
+                transaction.replace(R.id.ll_content, mFragmentOne);
+                break;
+        }
+        transaction.commit();
 
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, Integer o, int direction) {
-                MyAdapter.MyViewHolder myHolder = (MyAdapter.MyViewHolder) viewHolder;
-                viewHolder.itemView.setAlpha(1f);
-                myHolder.dislikeImageView.setAlpha(0f);
-                myHolder.likeImageView.setAlpha(0f);
-                Toast.makeText(MainActivity.this, direction == CardConfig.SWIPED_LEFT ? "swiped left" : "swiped right", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onSwipedClear() {
-                Toast.makeText(MainActivity.this, "data clear", Toast.LENGTH_SHORT).show();
-                recyclerView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        initData();
-                        recyclerView.getAdapter().notifyDataSetChanged();
-                    }
-                }, 3000L);
-            }
-
-        });
-        final ItemTouchHelper touchHelper = new ItemTouchHelper(cardCallback);
-        final CardLayoutManager cardLayoutManager = new CardLayoutManager(recyclerView, touchHelper);
-        recyclerView.setLayoutManager(cardLayoutManager);
-        touchHelper.attachToRecyclerView(recyclerView);
     }
 
-    private void initData() {
-        list.add(R.mipmap.img_avatar_01);
-        list.add(R.mipmap.img_avatar_02);
-        list.add(R.mipmap.img_avatar_03);
-        list.add(R.mipmap.img_avatar_04);
-        list.add(R.mipmap.img_avatar_05);
-        list.add(R.mipmap.img_avatar_06);
-        list.add(R.mipmap.img_avatar_07);
+    @Override
+    public void onTabUnselected(int position) {
+
     }
 
-    private class MyAdapter extends RecyclerView.Adapter {
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
-            return new MyViewHolder(view);
-        }
+    @Override
+    public void onTabReselected(int position) {
 
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            ImageView avatarImageView = ((MyViewHolder) holder).avatarImageView;
-            avatarImageView.setImageResource(list.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return list.size();
-        }
-
-        class MyViewHolder extends RecyclerView.ViewHolder {
-
-            ImageView avatarImageView;
-            ImageView likeImageView;
-            ImageView dislikeImageView;
-
-            MyViewHolder(View itemView) {
-                super(itemView);
-                avatarImageView = (ImageView) itemView.findViewById(R.id.iv_avatar);
-                likeImageView = (ImageView) itemView.findViewById(R.id.iv_like);
-                dislikeImageView = (ImageView) itemView.findViewById(R.id.iv_dislike);
-            }
-
-        }
     }
 }

@@ -1,4 +1,4 @@
-package com.apkcore.cardswipelayout.lib;
+package com.apkcore.cardswipelayout.cardswipe;
 
 import android.support.annotation.NonNull;
 import android.support.v4.view.MotionEventCompat;

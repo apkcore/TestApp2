@@ -1,4 +1,4 @@
-package com.apkcore.cardswipelayout.lib;
+package com.apkcore.cardswipelayout.cardswipe;
 
 public class CardConfig {
     /**

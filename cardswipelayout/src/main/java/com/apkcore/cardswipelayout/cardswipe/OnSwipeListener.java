@@ -1,4 +1,4 @@
-package com.apkcore.cardswipelayout.lib;
+package com.apkcore.cardswipelayout.cardswipe;
 
 import android.support.v7.widget.RecyclerView;
 
