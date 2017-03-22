@@ -1,4 +1,4 @@
-package com.apkcore.pathtest;
+package com.apkcore.pathtest.widget;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -17,7 +17,7 @@ import android.view.animation.LinearInterpolator;
  * Created by Apkcore on 2017/3/20.
  */
 
-public class MyPathView2 extends View {
+public class WaveView extends View {
     private Paint mPaint;
     private Path mPath;
     private PaintFlagsDrawFilter pfd;
@@ -29,24 +29,24 @@ public class MyPathView2 extends View {
     private int mWL = 1000;
     private int mCenterY;
 
-    public MyPathView2(Context context) {
+    public WaveView(Context context) {
         this(context, null);
     }
 
-    public MyPathView2(Context context, @Nullable AttributeSet attrs) {
+    public WaveView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public MyPathView2(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public WaveView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
         initAnimator();
     }
 
     private void initAnimator() {
-        ValueAnimator animator = ValueAnimator.ofInt(0,mWL);
-        animator.setDuration(1000);
+        ValueAnimator animator = ValueAnimator.ofInt(0, mWL);
         animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setDuration(1000);
         animator.setInterpolator(new LinearInterpolator());
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -71,14 +71,9 @@ public class MyPathView2 extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-//        mPath.moveTo(-mWL, mCenterY);
-//        mPath.quadTo((-mWL * 3 / 4), mCenterY + 60, (-mWL / 2), mCenterY);
-//        mPath.quadTo((-mWL / 4), mCenterY - 60, 0, mCenterY);
-//        mPath.quadTo((mWL / 4), mCenterY + 60, (mWL / 2), mCenterY);
-//        mPath.quadTo((mWL * 3 / 4), mCenterY - 60, mWL, mCenterY);
 
         mPath.reset();
-        mPath.moveTo(-mWL+offset,mCenterY);
+        mPath.moveTo(-mWL + offset, mCenterY);
         for (int i = 0; i < mWaveCount; i++) {
             mPath.quadTo((-mWL * 3 / 4) + (i * mWL) + offset, mCenterY + 60, (-mWL / 2) + (i * mWL) + offset, mCenterY);
             mPath.quadTo((-mWL / 4) + (i * mWL) + offset, mCenterY - 60, i * mWL + offset, mCenterY);

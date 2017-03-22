@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/a"
+        android:icon="@mipmap/ic_launcher"
+        android:title="基本线段"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/b"
+        android:icon="@mipmap/ic_launcher"
+        android:title="水波纹"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/c"
+        android:icon="@mipmap/ic_launcher"
+        android:title="小球"
+        app:showAsAction="never"
+        />
+</menu>

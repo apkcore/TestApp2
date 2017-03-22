@@ -1,4 +1,4 @@
-package com.apkcore.pathtest;
+package com.apkcore.pathtest.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -15,19 +15,19 @@ import android.view.View;
  * Created by Apkcore on 2017/3/20.
  */
 
-public class MyView extends View {
+public class BasePathView extends View {
     private Paint mPaint;
     private Path mPath;
 
-    public MyView(Context context) {
+    public BasePathView(Context context) {
         this(context, null);
     }
 
-    public MyView(Context context, @Nullable AttributeSet attrs) {
+    public BasePathView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public MyView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public BasePathView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
