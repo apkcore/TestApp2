@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 import static com.apkcore.pathtest.R.id.c;
 
@@ -21,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FrameLayout f = (FrameLayout) findViewById(R.id.frame);
         FragmentTransaction tran = getSupportFragmentManager().beginTransaction();
         if (fr != null) {
             tran.remove(fr);
