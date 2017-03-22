@@ -1,5 +1,6 @@
 package com.apkcore.pathtest.widget;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -10,6 +11,7 @@ import android.graphics.PointF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 
 /**
  * 贝塞尔小球
@@ -29,6 +31,8 @@ public class CircleView extends View {
 
     private int mW, mH;
 
+    private float mTime = -1.0f;
+
     public CircleView(Context context) {
         this(context, null);
     }
@@ -41,6 +45,7 @@ public class CircleView extends View {
         super(context, attrs, defStyleAttr);
         initPaint();
         initPoint();
+        startAnimation();
     }
 
     private void initPoint() {
@@ -62,7 +67,15 @@ public class CircleView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         mPath.reset();
-        canvas.translate(mW / 2, mH / 2);
+        if (mTime < 0) {
+            canvas.translate(mW / 2, mH / 2);
+        } else if (mTime > 0 && mTime <= 1) {
+            canvas.translate(mW / 2, mH / 2 + (mW / 2 - radius) * mTime);
+        } else if (mTime > 1 && mTime < 2) {
+            canvas.translate(mW / 2, (mH - radius) - ((mH / 2 - radius) * (mTime - 1)));
+        }
+        changeCircle(mTime);
+
         mPath.moveTo(mTopLine.middle.x, mTopLine.middle.y);
         mPath.cubicTo(mTopLine.right.x, mTopLine.right.y, mRightLine.top.x, mRightLine.top.y,
                 mRightLine.middle.x, mRightLine.middle.y);
@@ -73,7 +86,34 @@ public class CircleView extends View {
         mPath.cubicTo(mLeftLine.top.x, mLeftLine.top.y, mTopLine.left.x, mTopLine.left.y,
                 mTopLine.middle.x, mTopLine.middle.y);
         canvas.drawPath(mPath, mPaint);
-        //将画布移动到屏幕中间
+    }
+
+    private void changeCircle(float mTime) {
+        float tempT;
+        if (mTime>1){
+            tempT = mTime-1;
+        }else {
+            tempT = mTime;
+        }
+        if (tempT>0.1f&&tempT<=0.2f) {
+            if (mTime>1){
+                mBottomLine.setY(radius-tempT*radius*5);
+            }else {
+                mTopLine.setY(-radius+tempT*radius*5);
+            }
+
+        }else {
+            mTopLine.setY(-radius);
+            mBottomLine.setY(radius);
+            mTopLine.middle.x = mBottomLine.middle.x = 0;
+            mTopLine.left.x = mBottomLine.left.x = -radius*c;
+            mTopLine.right.x = mBottomLine.right.x = radius*c;
+            mRightLine.setX(radius);
+            mLeftLine.setX(-radius);
+            mRightLine.middle.y = mLeftLine.middle.y = 0;
+            mRightLine.top.y = mLeftLine.top.y = -radius*c;
+            mRightLine.bottom.y = mLeftLine.bottom.y = radius*c;
+        }
     }
 
 
@@ -82,6 +122,21 @@ public class CircleView extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         mW = w;
         mH = h;
+    }
+
+    public void startAnimation() {
+        ValueAnimator animator = ValueAnimator.ofFloat(0, 2.0f);
+        animator.setDuration(1000);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mTime = (float) animation.getAnimatedValue();
+                postInvalidate();
+            }
+        });
+        animator.start();
     }
 
     class HorizontalLine {
