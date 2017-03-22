@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/cardswipelayout/cardswipelayout.iml" filepath="$PROJECT_DIR$/cardswipelayout/cardswipelayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/mdtest/mdtest.iml" filepath="$PROJECT_DIR$/mdtest/mdtest.iml" />
       <module fileurl="file://$PROJECT_DIR$/miclock/miclock.iml" filepath="$PROJECT_DIR$/miclock/miclock.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pathtest/pathtest.iml" filepath="$PROJECT_DIR$/pathtest/pathtest.iml" />
       <module fileurl="file://$PROJECT_DIR$/tabstripdemo/tabstripdemo.iml" filepath="$PROJECT_DIR$/tabstripdemo/tabstripdemo.iml" />
     </modules>
   </component>
