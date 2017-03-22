@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Path;
+import android.graphics.Region;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -18,8 +19,8 @@ import android.view.animation.LinearInterpolator;
  */
 
 public class WaveView extends View {
-    private Paint mPaint;
-    private Path mPath;
+    private Paint mPaint,mPaint2;
+    private Path mPath, mPath2;
     private PaintFlagsDrawFilter pfd;
     private int mWaveCount;
 
@@ -46,7 +47,7 @@ public class WaveView extends View {
     private void initAnimator() {
         ValueAnimator animator = ValueAnimator.ofInt(0, mWL);
         animator.setRepeatCount(ValueAnimator.INFINITE);
-        animator.setDuration(1000);
+        animator.setDuration(2000);
         animator.setInterpolator(new LinearInterpolator());
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -64,13 +65,23 @@ public class WaveView extends View {
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mPaint.setStrokeWidth(10);
+
+        mPaint2 = new Paint();
+        mPaint2.setColor(Color.parseColor("#59c3e2"));
+        mPaint2.setAntiAlias(true);
+        mPaint2.setStyle(Paint.Style.STROKE);
+        mPaint2.setStrokeWidth(10);
+
         mPath = new Path(); //创建Path对象
+        mPath2 = new Path(); //创建Path对象
         pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        //画圆
+        canvas.drawCircle(mScreenWidth / 2, mCenterY, 300,mPaint2);
 
         mPath.reset();
         mPath.moveTo(-mWL + offset, mCenterY);
@@ -82,8 +93,13 @@ public class WaveView extends View {
         mPath.lineTo(0, mScreenHeight);
         mPath.close();
 
+        mPath2.addCircle(mScreenWidth / 2, mCenterY, 300, Path.Direction.CCW);
+        //api19以上才能用
+//        mPath.op(mPath2, Path.Op.INTERSECT);
+        //改用canvas.clipPath
+        canvas.clipPath(mPath, Region.Op.INTERSECT);
         canvas.setDrawFilter(pfd);
-        canvas.drawPath(mPath, mPaint);
+        canvas.drawPath(mPath2, mPaint);
 
     }
 
