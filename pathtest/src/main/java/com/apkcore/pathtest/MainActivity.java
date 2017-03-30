@@ -8,8 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import static com.apkcore.pathtest.R.id.c;
-
 public class MainActivity extends AppCompatActivity {
 
     private Fragment fr;
@@ -52,11 +50,18 @@ public class MainActivity extends AppCompatActivity {
                 fr = new WaveFr();
                 tran.add(R.id.frame, fr).commit();
                 break;
-            case c:
+            case R.id.c:
                 if (fr != null) {
                     tran.remove(fr);
                 }
                 fr = new CircleFr();
+                tran.add(R.id.frame, fr).commit();
+                break;
+            case R.id.d:
+                if (fr != null) {
+                    tran.remove(fr);
+                }
+                fr = new FouthFr();
                 tran.add(R.id.frame, fr).commit();
                 break;
             default:

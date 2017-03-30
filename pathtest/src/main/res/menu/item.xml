@@ -20,4 +20,10 @@
         android:title="小球"
         app:showAsAction="never"
         />
+    <item
+        android:id="@+id/d"
+        android:icon="@mipmap/ic_launcher"
+        android:title="心"
+        app:showAsAction="never"
+        />
 </menu>
